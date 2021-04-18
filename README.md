@@ -1,0 +1,1 @@
+# vue-go-spa-sample
