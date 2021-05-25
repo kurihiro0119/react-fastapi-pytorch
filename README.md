@@ -1,1 +1,1 @@
-# vue-go-spa-sample
+# react-fastapi-pytorch

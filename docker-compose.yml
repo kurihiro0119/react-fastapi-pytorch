@@ -1,0 +1,42 @@
+version: "3"
+services:
+  # FastAPI Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: app-server
+    ports:
+      - 8000:8000
+    tty: true # コンテナの起動永続化
+    volumes:
+      - ./server:/var/app
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+  # client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./client/src:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
+  # DB
+  db:
+    build:
+      context: ./DB
+      dockerfile: Dockerfile
+    container_name: app-db
+    ports:
+      - 33060:3306
+    volumes:
+      - ./postgres_db:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    hostname: postgres
+    user: root
